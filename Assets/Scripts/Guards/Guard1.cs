@@ -10,7 +10,9 @@ public class Guard1 : GuardStates
 
     protected override void Update()
     {
-        CheckForPlayer();
+        if(state != State.Sleep){
+            CheckForPlayer();
+        }
         base.Update();
     }
 
@@ -19,13 +21,13 @@ public class Guard1 : GuardStates
             agent.ResetPath();
             chaseMode.SetActive(true);
             state = State.Chase;
-            Debug.Log("Visto");
         }
-        else{
-            if(state != State.Patrol){
-                chaseMode.SetActive(false);
-                state = State.Patrol;
-            }
+        else if(state == State.Chase && Vector3.Distance(transform.position,target.position) > sightDistance){
+            agent.ResetPath();
+            chaseMode.SetActive(false);
+            state = State.Patrol;
         }
+
     }
+
 }
